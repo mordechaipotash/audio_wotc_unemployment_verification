@@ -83,3 +83,7 @@ Row-level security is enabled to protect data access.
 ## License
 
 Private repository - All rights reserved
+
+---
+
+Built with Next.js 14 and deployed on Vercel
