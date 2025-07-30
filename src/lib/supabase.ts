@@ -89,7 +89,6 @@ export interface AudioMetrics {
   introAudioCompletionTime: number | null;
   employmentAudioCompletionTime: number | null;
   totalAudioListenTimeSeconds: number;
-  totalListenTime: number;
 }
 
 export const saveAudioFormSubmission = async (formData: any, audioMetrics?: AudioMetrics) => {
