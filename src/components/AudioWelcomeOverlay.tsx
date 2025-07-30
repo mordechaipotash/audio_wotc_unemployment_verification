@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { Volume2, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
 

@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { saveAudioFormSubmission, type AudioMetrics } from '../lib/supabase';
+'use client'
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { saveAudioFormSubmission, type AudioMetrics } from '@/lib/supabase';
 import { AlertCircle } from 'lucide-react';
 import { ProgressSteps } from './ui/ProgressSteps';
 import { AudioWelcomeOverlay } from './AudioWelcomeOverlay';
@@ -26,7 +28,7 @@ interface AudioFormProps {
 }
 
 export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [step, setStep] = useState<'welcome' | 'intro' | 'employment'>('welcome');
   const [error, setError] = useState<string | null>(null);
   const [formStartTime] = useState(new Date().toISOString());
@@ -97,19 +99,20 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
 
   const playEmploymentAudio = () => {
     console.log('Playing employment audio');
-    setIsButtonEnabled(false);
+    // Don't disable buttons for employment audio
     const audio = document.getElementById('employmentAudio') as HTMLAudioElement;
     if (audio) {
       audio.currentTime = 0;
       handleAudioStart('employment');
       audio.play()
         .then(() => {
-          setIsButtonEnabled(true);
+          console.log('Employment audio started successfully');
         })
         .catch(e => {
           console.error('Error playing employment audio:', e);
-          setIsButtonEnabled(true);
         });
+    } else {
+      console.error('Employment audio element not found');
     }
   };
 
@@ -161,7 +164,11 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
   };
 
   const handleEmploymentSelection = async (status: boolean) => {
+    console.log('handleEmploymentSelection called with status:', status);
+    
     stopCurrentAudio();
+    setError(null); // Clear any existing errors
+    
     try {
       const completionTime = new Date();
       const formCompletionData = {
@@ -173,11 +180,21 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
         )
       };
 
+      console.log('Submitting form data:', formCompletionData);
+      console.log('Audio metrics:', audioMetrics);
+      
       const result = await saveAudioFormSubmission(formCompletionData, audioMetrics);
-      if (result.error) throw result.error;
+      
+      console.log('Save result:', result);
+      
+      if (result.error) {
+        console.error('Error in result:', result.error);
+        throw result.error;
+      }
       
       console.log('Form submitted successfully:', result.data);
-      navigate('/thank-you', { replace: true });
+      console.log('Navigating to thank you page...');
+      router.replace('/thank-you');
     } catch (error) {
       console.error('Error from saveAudioFormSubmission:', error);
       setError('An error occurred while submitting the form. Please try again.');
@@ -290,16 +307,28 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <button
-                    onClick={() => handleEmploymentSelection(true)}
-                    className="w-full p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('Yes button clicked - event captured');
+                      handleEmploymentSelection(true);
+                    }}
+                    className="w-full p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors cursor-pointer z-10 relative"
                   >
                     Yes
                     <div className="text-sm">At least one statement is true</div>
                   </button>
                   
                   <button
-                    onClick={() => handleEmploymentSelection(false)}
-                    className="w-full p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('No button clicked - event captured');
+                      handleEmploymentSelection(false);
+                    }}
+                    className="w-full p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors cursor-pointer z-10 relative"
                   >
                     No
                     <div className="text-sm">None of the statements are true</div>

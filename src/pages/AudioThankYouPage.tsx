@@ -1,21 +1,23 @@
+'use client'
+
 import React, { useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 export const AudioThankYouPage: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     // After 5 seconds, navigate back to menu if user was authenticated
     const timer = setTimeout(() => {
       const hasPin = sessionStorage.getItem('lastPinEntry');
       if (hasPin) {
-        navigate('/menu');
+        router.push('/menu');
       }
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">

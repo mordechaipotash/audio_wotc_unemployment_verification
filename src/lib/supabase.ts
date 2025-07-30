@@ -1,15 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Get environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Validate environment variables
 if (!supabaseUrl) {
-  throw new Error('Missing environment variable: VITE_SUPABASE_URL');
+  throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_URL');
 }
 if (!supabaseAnonKey) {
-  throw new Error('Missing environment variable: VITE_SUPABASE_ANON_KEY');
+  throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY');
 }
 
 // Log configuration for debugging
@@ -17,8 +17,8 @@ console.log('Supabase Configuration:', {
   url: supabaseUrl,
   hasAnonKey: !!supabaseAnonKey,
   envVars: {
-    hasUrl: 'VITE_SUPABASE_URL' in import.meta.env,
-    hasAnonKey: 'VITE_SUPABASE_ANON_KEY' in import.meta.env
+    hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   }
 });
 
@@ -35,10 +35,9 @@ const testConnection = async () => {
   console.log('Testing database connection...');
   try {
     const { data, error } = await supabase
-      .from('form_pages')
-      .select('count')
-      .limit(1)
-      .single();
+      .from('audio_form_responses')
+      .select('id')
+      .limit(1);
 
     if (error) {
       console.error('Database connection error:', error);
@@ -95,6 +94,18 @@ export interface AudioMetrics {
 
 export const saveAudioFormSubmission = async (formData: any, audioMetrics?: AudioMetrics) => {
   try {
+    // First, let's check if we can access the table
+    const { data: testData, error: testError } = await supabase
+      .from('audio_form_responses')
+      .select('id')
+      .limit(1);
+    
+    if (testError) {
+      console.error('Table access test failed:', testError);
+    } else {
+      console.log('Table access test successful');
+    }
+    
     const now = new Date().toISOString();
     
     // Helper function to truncate strings
@@ -125,11 +136,7 @@ export const saveAudioFormSubmission = async (formData: any, audioMetrics?: Audi
       Math.round((Date.now() - new Date(formData.formStartTime).getTime()) / 1000) : 
       0;
 
-    // Generate a UUID for the id field
-    const uuid = crypto.randomUUID();
-
     const submissionData = {
-      id: uuid,
       first_name: truncate(formData.firstName?.trim(), 50),
       last_name: truncate(formData.lastName?.trim(), 50),
       dob: formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : null,
@@ -163,7 +170,7 @@ export const saveAudioFormSubmission = async (formData: any, audioMetrics?: Audi
       employment_audio_played: formData.employmentAudioPlayed === true,
       intro_audio_completion_time: formData.introAudioCompletionTime || null,
       employment_audio_completion_time: formData.employmentAudioCompletionTime || null,
-      total_audio_listen_time_seconds: audioMetrics?.totalListenTime || 0,
+      total_audio_listen_time_seconds: audioMetrics?.totalAudioListenTimeSeconds || 0,
       
       // Session tracking
       referrer: truncate(document.referrer, 50),
@@ -177,7 +184,15 @@ export const saveAudioFormSubmission = async (formData: any, audioMetrics?: Audi
       .insert([submissionData])
       .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      throw error;
+    }
     return { data, error: null };
   } catch (error) {
     console.error('Error saving form submission:', error);
