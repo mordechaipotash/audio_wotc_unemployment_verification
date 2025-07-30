@@ -29,7 +29,7 @@ export const AudioWelcomeOverlay: React.FC<AudioWelcomeOverlayProps> = ({ onStar
 
             <div className="flex items-center space-x-3 text-gray-600">
               <CheckCircle2 className="w-6 h-6 flex-shrink-0 text-blue-600" />
-              <p className="text-left">You'll be asked a few simple questions about your employment status.</p>
+              <p className="text-left">You&apos;ll be asked a few simple questions about your employment status.</p>
             </div>
           </div>
 

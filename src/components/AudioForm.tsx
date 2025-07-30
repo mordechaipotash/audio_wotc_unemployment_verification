@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveAudioFormSubmission, type AudioMetrics } from '@/lib/supabase';
 import { AlertCircle } from 'lucide-react';
@@ -62,7 +62,7 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
     setAudioStartTime(Date.now());
   };
 
-  const handleAudioEnd = (audioType: 'intro' | 'employment') => {
+  const handleAudioEnd = useCallback((audioType: 'intro' | 'employment') => {
     if (audioStartTime) {
       const listenTime = Math.round((Date.now() - audioStartTime) / 1000);
       setAudioMetrics(prev => ({
@@ -77,7 +77,7 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
         [`${audioType}AudioCompletionTime`]: Date.now()
       }));
     }
-  };
+  }, [audioStartTime]);
 
   const playIntroAudio = () => {
     console.log('Playing intro audio');
@@ -131,7 +131,7 @@ export const AudioForm: React.FC<AudioFormProps> = ({ companyName }) => {
       introAudio?.removeEventListener('ended', handleIntroEnd);
       employmentAudio?.removeEventListener('ended', handleEmploymentEnd);
     };
-  }, [audioStartTime]); // Only re-run if audioStartTime changes
+  }, [audioStartTime, handleAudioEnd]); // Dependencies
 
   const handleStart = () => {
     setStep('intro');
