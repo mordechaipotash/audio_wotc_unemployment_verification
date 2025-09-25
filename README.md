@@ -2,6 +2,9 @@
 
 **Production multi-tenant SaaS application** that streamlines WOTC unemployment verification through innovative audio-guided progressive forms with real-time analytics and white-label branding support.
 
+![Audio Form Interface](.github/assets/Screenshot%202025-08-29%20at%2017.29.22.png)
+*Progressive disclosure form with audio guidance and real-time validation*
+
 ## 🎯 Overview
 
 A sophisticated SaaS platform enabling multiple companies to efficiently collect WOTC unemployment verification data through an audio-guided interface, reducing form abandonment and improving data quality through progressive disclosure and real-time guidance.
@@ -48,6 +51,9 @@ Step 4: Review → Audio confirms accuracy before submission
 ### Audio UI Features
 - **Contextual guidance**: Audio explains each form section before display
 - **Error prevention**: Audio warns before common mistakes
+
+![Employment Verification Step](.github/assets/Screenshot%202025-08-29%20at%2017.29.49.png)
+*Multi-step employment verification with dynamic field visibility*
 - **Accessibility**: Voice guidance for visually impaired users
 - **Mobile optimization**: Audio playback works on all devices
 - **Engagement**: Reduces cognitive load through auditory support
@@ -113,6 +119,9 @@ CREATE POLICY "Tenant isolation"
   FOR ALL
   USING (company_route = current_setting('app.current_tenant')::TEXT);
 ```
+
+![Analytics Dashboard](.github/assets/Screenshot%202025-08-29%20at%2017.29.55.png)
+*Real-time analytics dashboard showing completion rates and form performance metrics*
 
 ## 🚀 Setup & Deployment
 
