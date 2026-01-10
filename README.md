@@ -106,3 +106,15 @@ Part of the WOTC (Work Opportunity Tax Credit) processing suite:
 
 **Status**: Production  
 **Tech Focus**: Backend architecture, multi-tenant systems, PostgreSQL
+
+## WOTC Suite
+
+This is part of a complete Work Opportunity Tax Credit processing ecosystem:
+
+- [digital_8850](https://github.com/mordechaipotash/digital_8850) - IRS Form 8850 with 7-language support
+- [enterprise-tax-credit-platform](https://github.com/mordechaipotash/enterprise-tax-credit-platform) - Full processing platform with AI extraction
+- **audio_wotc_unemployment_verification** (this repo) - Audio verification system
+
+---
+
+*Built by [Mordechai Potash](https://github.com/mordechaipotash)*
