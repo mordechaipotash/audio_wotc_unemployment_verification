@@ -1,14 +1,30 @@
 # Audio WOTC Unemployment Verification System
 
-Backend system for multi-tenant audio file management and unemployment verification processing.
+> **$200K+ revenue generated in 2024. Built in 1 week. Solo.**
 
-## 🎯 Overview
+Production multi-tenant system that automated a $5K/applicant phone call bottleneck into self-service verification in minutes.
 
-Production system for managing audio-based unemployment verification workflows as part of the Work Opportunity Tax Credit (WOTC) application process.
+## 📊 Business Impact
+
+| Metric | Value |
+|--------|-------|
+| Revenue generated | $200K+ (2024) |
+| Build time | 1 week |
+| Previous cost | $5K/applicant (phone calls) |
+| New cost | ~$0.10/applicant |
+| Time savings | 45 min → 2 min per verification |
+
+## 🎯 The Problem
+
+Tax credit applications require unemployment verification. The industry standard: manual phone calls to state agencies at $5K per applicant, taking 45+ minutes each.
+
+## ✅ The Solution
+
+Self-service audio upload system where applicants record their own verification, processed automatically with full audit trail.
+
+---
 
 ## 🏗️ Architecture
-
-**Backend**:
 - **Next.js 14** API routes for audio processing
 - **PostgreSQL** database with multi-tenant architecture
 - **Supabase** for storage and real-time features
