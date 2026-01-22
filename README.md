@@ -110,16 +110,6 @@ CREATE POLICY tenant_isolation ON audio_files
 
 ---
 
-## More Screenshots
-
-![Dashboard](.github/assets/Screenshot%202025-08-29%20at%2017.29.22.png)
-
-![Verification Flow](.github/assets/Screenshot%202025-08-29%20at%2017.29.49.png)
-
-![Completion](.github/assets/Screenshot%202025-08-29%20at%2017.29.55.png)
-
----
-
 ## The Pattern
 
 This is part of a larger WOTC ecosystem I built:
