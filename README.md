@@ -118,7 +118,7 @@ This is part of a larger WOTC ecosystem I built:
 |--------|---------|------|
 | **Audio WOTC** | Voice-guided verification (this repo) | You're here |
 | **Digital 8850** | Multi-language IRS form (7 languages) | [View →](https://github.com/mordechaipotash/digital_8850) |
-| **Enterprise Platform** | Full pipeline: Gmail → AI → PostGIS → CSV | [View →](https://github.com/mordechaipotash/enterprise-tax-credit-platform) |
+| **WOTCFY Production** | Full platform: AI extraction, PostGIS EZ zones, 29K LOC | [View →](https://github.com/mordechaipotash/wotcfy-app-production) |
 
 ---
 
